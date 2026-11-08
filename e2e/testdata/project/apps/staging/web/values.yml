@@ -1,0 +1,3 @@
+replicas: 1
+auth:
+  clientSecret: fake-staging-client-secret

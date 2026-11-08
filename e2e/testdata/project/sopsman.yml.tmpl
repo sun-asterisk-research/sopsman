@@ -1,0 +1,22 @@
+# Fixture config; {{ALICE}}, {{BOB}} and {{FLUX}} are replaced with generated age recipients.
+recipients:
+  alice: { age: {{ALICE}} }
+  fluxcd: { age: {{FLUX}} }
+groups:
+  operators: [alice]
+  prod: [operators, fluxcd]
+  staging: [operators, fluxcd]
+rules:
+  # Kubernetes Secrets: only data/stringData values are encrypted.
+  - files: ["apps/**/secret.yaml"]
+    recipients: [prod]
+    encrypted_regex: ^(data|stringData)$
+  - files: ["{apps,infrastructure}/production/**/{secret,values}*.*", "infrastructure/**/htpasswd"]
+    recipients: [prod]
+  - files: ["components/patches/production/**/secret*.*"]
+    recipients: [prod]
+  - files: ["apps/staging/**/{secret,values}*.*"]
+    recipients: [staging]
+  # Cluster provisioning secrets: operators only, not readable by the cluster.
+  - files: ["tg/clusters/**/*.tfvars"]
+    recipients: [operators]

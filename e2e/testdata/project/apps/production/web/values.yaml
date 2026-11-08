@@ -1,0 +1,13 @@
+# Helm values for web
+replicas: 2
+image:
+  tag: v1.2.3
+auth:
+  # rotated yearly
+  clientSecret: fake-client-secret
+  enabled: true
+upstreams:
+  - version: v1
+  - version: v1
+  - version: v2
+timeoutSeconds: 30
